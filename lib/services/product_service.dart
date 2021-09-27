@@ -24,11 +24,21 @@ class ProductService {
   addProduct(Product product, XFile file) async {
     var request = http.MultipartRequest('POST', uri)
       ..fields['product'] = jsonEncode(product.toJson())
+<<<<<<< Updated upstream
       ..files.add(await http.MultipartFile.fromBytes('image', await file.readAsBytes(),
           filename: file.name));
     var response = await client.send(request);
     if (response.statusCode == 200) {
       return Product.fromJson(jsonDecode(await response.stream.bytesToString()));
+=======
+      ..files.add(await http.MultipartFile.fromBytes(
+          'image', await file.readAsBytes(),
+          filename: file.name));
+    var response = await client.send(request);
+    if (response.statusCode == 200) {
+      return Product.fromJson(
+          jsonDecode(await response.stream.bytesToString()));
+>>>>>>> Stashed changes
     } else {
       throw Exception('Failed to create product');
     }
@@ -52,4 +62,20 @@ class ProductService {
       throw Exception('Failed to delete product.');
     }
   }
+<<<<<<< Updated upstream
+=======
+
+  updateImage(XFile xFile, String imageId) async {
+    final Uri uri = Uri.parse('$BASEURL/products/images/$imageId');
+
+    var request = http.MultipartRequest('PUT', uri)
+      ..files.add(await http.MultipartFile.fromBytes(
+          'image', await xFile.readAsBytes(),
+          filename: xFile.name));
+    var response = await client.send(request);
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update product image.');
+    }
+  }
+>>>>>>> Stashed changes
 }

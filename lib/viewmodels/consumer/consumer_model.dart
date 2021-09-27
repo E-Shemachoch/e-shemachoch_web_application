@@ -16,8 +16,10 @@ class ConsumerModel with ChangeNotifier {
   getConsumers() async {
     try {
       consumers = await service.getConsumers();
+      hasError = false;
       isLoading = false;
     } catch (e) {
+      print(e);
       hasError = true;
     }
     notifyListeners();
@@ -30,11 +32,24 @@ class ConsumerModel with ChangeNotifier {
     } catch (e) {}
   }
 
-  updateConsumer(Consumer consumer) {
-    service.updateConsumer(consumer);
+  updateConsumer(Consumer consumer) async {
+    try {
+      await service.updateConsumer(consumer);
+      getConsumers();
+    } catch (e) {}
   }
 
-  deleteConsumer(Consumer consumer) {
-    service.deleteConsumer(consumer);
+  deleteConsumer(Consumer consumer) async {
+    try {
+      await service.deleteConsumer(consumer);
+      getConsumers();
+    } catch (e) {}
+  }
+
+  updateImage(XFile xFile, String imageId) async {
+    try {
+      await service.updateImage(xFile, imageId);
+      getConsumers();
+    } catch (e) {}
   }
 }

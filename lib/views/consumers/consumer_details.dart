@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:eshemachoch_web_application/constants/api.dart';
+import 'package:eshemachoch_web_application/viewmodels/adminstrator/adminstrator_model.dart';
 import 'package:eshemachoch_web_application/viewmodels/consumer/consumer_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart' hide Consumer;
@@ -17,27 +21,35 @@ class ConsumerDetailsState extends State<ConsumerDetails> {
   FormState get form => formKey.currentState!;
 
   Consumer? consumer;
-  XFile? pickedFile;
+  XFile? pickedImage;
   @override
   Widget build(BuildContext context) {
     var edit = widget.consumer != null;
+    final adminstrator = context.read<AdminstratorModel>().adminstrator;
+
     handleAdding() {
       if (form.validate()) {
         consumer = Consumer.empty();
         form.save();
-        context.read<ConsumerModel>().addConsumer(consumer!, pickedFile!);
+        context.read<ConsumerModel>().addConsumer(consumer!, pickedImage!);
         Navigator.pop(context);
       }
     }
 
     handleUpdating() {
       if (form.validate()) {
+        consumer = Consumer.empty();
         form.save();
-
-        if (widget.consumer!.name != consumer!.name ||
-            widget.consumer!.block != consumer!.block ||
-            widget.consumer!.district != consumer!.district)
+        if (widget.consumer! != consumer!) {
+          consumer = consumer?.copyWith(id: widget.consumer!.id!);
+          consumer = consumer?.copyWith(image: widget.consumer!.image);
           context.read<ConsumerModel>().updateConsumer(consumer!);
+        }
+        if (pickedImage != null) {
+          context
+              .read<ConsumerModel>()
+              .updateImage(pickedImage!, widget.consumer!.image);
+        }
         Navigator.pop(context);
       }
     }
@@ -45,11 +57,11 @@ class ConsumerDetailsState extends State<ConsumerDetails> {
     void handlePickingImage() async {
       final file = await ImagePicker().pickImage(source: ImageSource.gallery);
       setState(() {
-        pickedFile = file;
+        pickedImage = file;
       });
     }
 
-    var imageExists = pickedFile != null || edit;
+    var imageExists = pickedImage != null || edit;
     return Form(
       key: formKey,
       child: Scaffold(
@@ -80,8 +92,15 @@ class ConsumerDetailsState extends State<ConsumerDetails> {
                       SizedBox(
                         height: 100,
                         width: 100,
-                        child: Image.network(edit ? consumer!.photo : pickedFile!.path,
-                            fit: BoxFit.cover),
+                        child: Image.network(
+                            pickedImage != null
+                                ? pickedImage!.path
+                                : '$BASEURL/consumers/images/${widget.consumer!.image}',
+                            fit: BoxFit.cover,
+                            headers: {
+                              HttpHeaders.authorizationHeader:
+                                  adminstrator!.token!,
+                            }),
                       ),
                     ElevatedButton(
                       child: Text('${edit ? 'Change' : 'Upload'}  Photo'),
@@ -90,55 +109,72 @@ class ConsumerDetailsState extends State<ConsumerDetails> {
                   ],
                 ),
                 TextFormField(
+                  initialValue: widget.consumer?.name,
                   decoration: InputDecoration(
-                      labelText: edit ? widget.consumer!.name : 'Enter Name'),
+                    labelText: 'Enter Name',
+                    hintText: widget.consumer?.name,
+                  ),
                   onSaved: (value) {
                     consumer = consumer?.copyWith(name: value);
                   },
                 ),
                 TextFormField(
+                  initialValue: widget.consumer?.phoneNumber,
                   decoration: InputDecoration(
-                      labelText:
-                          edit ? widget.consumer!.phoneNumber : 'Enter Phone Number'),
+                    labelText: 'Enter Phone Number',
+                    hintText: widget.consumer?.phoneNumber,
+                  ),
                   onSaved: (value) {
                     consumer = consumer?.copyWith(phoneNumber: value!);
                   },
                 ),
                 TextFormField(
+                  initialValue: widget.consumer?.familySize.toString(),
                   decoration: InputDecoration(
-                      labelText: edit
-                          ? widget.consumer!.familySize.toString()
-                          : 'Enter Family Size'),
+                      labelText: 'Enter Family Size',
+                      hintText: widget.consumer?.familySize.toString()),
                   onSaved: (value) {
-                    consumer = consumer?.copyWith(familySize: int.parse(value!));
+                    consumer =
+                        consumer?.copyWith(familySize: int.parse(value!));
                   },
                 ),
                 TextFormField(
+                  initialValue: widget.consumer?.district,
                   decoration: InputDecoration(
-                      labelText: edit ? widget.consumer!.district : 'Enter District'),
+                    labelText: 'Enter District',
+                    hintText: widget.consumer?.district,
+                  ),
                   onSaved: (value) {
                     consumer = consumer?.copyWith(district: value!);
                   },
                 ),
                 TextFormField(
+                  initialValue: widget.consumer?.subCity,
                   decoration: InputDecoration(
-                      labelText: edit ? widget.consumer!.subCity : 'Enter Sub-City'),
+                    labelText: 'Enter Sub-City',
+                    hintText: widget.consumer?.subCity,
+                  ),
                   onSaved: (value) {
                     consumer = consumer?.copyWith(subCity: value);
                   },
                 ),
                 TextFormField(
+                  initialValue: widget.consumer?.houseNumber.toString(),
                   decoration: InputDecoration(
-                      labelText: edit
-                          ? widget.consumer!.houseNumber.toString()
-                          : 'Enter House Number'),
+                    labelText: 'Enter House Number',
+                    hintText: widget.consumer?.houseNumber.toString(),
+                  ),
                   onSaved: (value) {
-                    consumer = consumer?.copyWith(houseNumber: int.parse(value!));
+                    consumer =
+                        consumer?.copyWith(houseNumber: int.parse(value!));
                   },
                 ),
                 TextFormField(
+                  initialValue: widget.consumer?.block,
                   decoration: InputDecoration(
-                      labelText: edit ? widget.consumer!.block : 'Enter Block'),
+                    labelText: 'Enter Block',
+                    hintText: widget.consumer?.block,
+                  ),
                   onSaved: (value) {
                     consumer = consumer?.copyWith(block: value!);
                   },
