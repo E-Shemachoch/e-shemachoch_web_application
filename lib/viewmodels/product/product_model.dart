@@ -44,8 +44,6 @@ class ProductModel with ChangeNotifier {
       getProducts();
     } catch (e) {}
   }
-<<<<<<< Updated upstream
-=======
 
   updateImage(XFile xFile, String imageId) async {
     try {
@@ -53,5 +51,4 @@ class ProductModel with ChangeNotifier {
       getProducts();
     } catch (e) {}
   }
->>>>>>> Stashed changes
 }

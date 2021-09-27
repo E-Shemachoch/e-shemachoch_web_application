@@ -5,32 +5,19 @@ part 'product.g.dart';
 
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Product extends Equatable {
-<<<<<<< Updated upstream
-  Product(this.id, this.name, this.price, this.quantity, this.initialQuantity, this.image,
-      this.date);
-=======
   Product(this.id, this.name, this.price, this.quantity, this.initialQuantity,
       this.image, this.date);
->>>>>>> Stashed changes
 
   final String? id;
   final String name;
   final double price;
   final int quantity;
-<<<<<<< Updated upstream
-  final int initialQuantity;
-  final String image;
-  final int date;
-
-  factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);
-=======
   final int? initialQuantity;
   final String image;
   final int date;
 
   factory Product.fromJson(Map<String, dynamic> json) =>
       _$ProductFromJson(json);
->>>>>>> Stashed changes
 
   Map<String, dynamic> toJson() => _$ProductToJson(this);
 

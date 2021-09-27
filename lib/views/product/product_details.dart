@@ -1,13 +1,8 @@
-<<<<<<< Updated upstream
-import 'package:eshemachoch_web_application/constants/api.dart';
-import 'package:eshemachoch_web_application/models/product.dart';
-=======
 import 'dart:io';
 
 import 'package:eshemachoch_web_application/constants/api.dart';
 import 'package:eshemachoch_web_application/models/product.dart';
 import 'package:eshemachoch_web_application/viewmodels/adminstrator/adminstrator_model.dart';
->>>>>>> Stashed changes
 import 'package:eshemachoch_web_application/viewmodels/product/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,21 +25,14 @@ class ProductDetailsState extends State<ProductDetails> {
   @override
   Widget build(BuildContext context) {
     var edit = widget.product != null;
-<<<<<<< Updated upstream
-=======
     final adminstrator = context.read<AdminstratorModel>().adminstrator;
 
->>>>>>> Stashed changes
     handleAdding() {
       if (form.validate()) {
         product = Product.empty();
         form.save();
-<<<<<<< Updated upstream
-        product = product?.copyWith(date: DateTime.now().millisecondsSinceEpoch);
-=======
         product =
             product?.copyWith(date: DateTime.now().millisecondsSinceEpoch);
->>>>>>> Stashed changes
         context.read<ProductModel>().addProduct(product!, pickedImage!);
         Navigator.pop(context);
       }
@@ -55,14 +43,6 @@ class ProductDetailsState extends State<ProductDetails> {
         product = Product.empty();
         form.save();
         if (widget.product! != product!) {
-<<<<<<< Updated upstream
-          product = product?.copyWith(id: widget.product!.id!);
-          product = product?.copyWith(image: widget.product!.image);
-          product = product?.copyWith(date: DateTime.now().millisecondsSinceEpoch);
-          context.read<ProductModel>().updateProduct(product!);
-        }
-        if (pickedImage != null) {}
-=======
           product = product?.copyWith(
             id: widget.product!.id!,
             image: widget.product!.image,
@@ -76,7 +56,6 @@ class ProductDetailsState extends State<ProductDetails> {
               .read<ProductModel>()
               .updateImage(pickedImage!, widget.product!.image);
         }
->>>>>>> Stashed changes
         Navigator.pop(context);
       }
     }
@@ -123,15 +102,11 @@ class ProductDetailsState extends State<ProductDetails> {
                             pickedImage != null
                                 ? pickedImage!.path
                                 : '$BASEURL/products/images/${widget.product!.image}',
-<<<<<<< Updated upstream
-                            fit: BoxFit.cover),
-=======
                             fit: BoxFit.cover,
                             headers: {
                               HttpHeaders.authorizationHeader:
                                   adminstrator!.token!,
                             }),
->>>>>>> Stashed changes
                       ),
                     ElevatedButton(
                       child: Text('${edit ? 'Change' : 'Update'} Image'),
@@ -164,14 +139,9 @@ class ProductDetailsState extends State<ProductDetails> {
                       labelText: 'Enter Quantity',
                       hintText: widget.product?.quantity.toString()),
                   onSaved: (value) {
-<<<<<<< Updated upstream
-                    product = product?.copyWith(quantity: int.parse(value!));
-                    product = product?.copyWith(initialQuantity: int.parse(value!));
-=======
                     product = product?.copyWith(
                         quantity: int.parse(value!),
                         initialQuantity: int.parse(value));
->>>>>>> Stashed changes
                   },
                 ),
               ],
